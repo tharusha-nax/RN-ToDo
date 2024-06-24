@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, View, Button, Alert, StyleSheet, TextInput, FlatList, SafeAreaView, TouchableOpacity } from "react-native";
+import { Text, View, Button, Alert, StyleSheet, TextInput, FlatList, SafeAreaView, TouchableOpacity, Modal, StatusBar, Pressable } from "react-native";
 
 const DATA = [
   {
@@ -22,6 +22,7 @@ const DATA = [
 export default function Index() {
   const [items, setItems] = useState(DATA);
   const [text, setText] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const addNewTodo = () => {
     let newTodo = {
@@ -53,9 +54,18 @@ export default function Index() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-      <TextInput style={styles.input} onChangeText={setText} value={text} />
-      <Button title="Add ToDo" onPress={addNewTodo} />
+      <Button title="Add an item" onPress={() => setIsModalVisible(true)} />
+      <Modal visible={isModalVisible} transparent={true} onRequestClose={() => setIsModalVisible(!isModalVisible)}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+        <TextInput style={styles.input} onChangeText={setText} value={text} />
+            <Pressable style={styles.button} onPress={addNewTodo} >
+              <Text>Add new ToDo</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+      <StatusBar style="auto" />
       <FlatList
         style={styles.list}
         data={items}
@@ -77,6 +87,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderColor: 'gray',
+    marginBottom: 10
+  },
+  button: {
+    borderRadius: 10
   },
   list: {
     alignSelf: 'stretch'
@@ -95,5 +109,26 @@ const styles = StyleSheet.create({
   itemTextCompleted: {
     color: 'white',
     textDecorationLine: 'line-through'
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: 'black',
+    shadowoffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   }
 })
