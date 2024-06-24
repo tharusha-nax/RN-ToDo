@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, View, Button, Alert, StyleSheet, TextInput, FlatList, SafeAreaView } from "react-native";
+import { Text, View, Button, Alert, StyleSheet, TextInput, FlatList, SafeAreaView, TouchableOpacity } from "react-native";
 
 const DATA = [
   {
@@ -19,14 +19,6 @@ const DATA = [
   },
 ]
 
-const TodoItem = (props) => {
-  return (
-    <View style={styles.item}>
-      <Text style={styles.itemText}>{props.item.title}</Text>
-    </View>
-  )
-}
-
 export default function Index() {
   const [items, setItems] = useState(DATA);
   const [text, setText] = useState('');
@@ -40,6 +32,23 @@ export default function Index() {
 
     setItems([...items, newTodo]);
     setText('');
+  }
+
+  const markItemCompleted = (item) => {
+    const itemIndex = items.findIndex(currItem => currItem.id === item.id);
+
+    if (itemIndex !== -1) {
+      const updatedItems = [...items];
+      updatedItems[itemIndex] = { ...items[itemIndex], completed: true };
+      setItems(updatedItems);
+    }
+  }
+  const TodoItem = (props) => {
+    return (
+      <TouchableOpacity style={styles.item} onPress={() => markItemCompleted(props.item)}>
+        <Text style={props.item.completed ? styles.itemTextCompleted : styles.itemText}>{props.item.title}</Text>
+      </TouchableOpacity>
+    )
   }
 
   return (
@@ -82,5 +91,9 @@ const styles = StyleSheet.create({
 
   itemText: {
     color: 'white',
+  },
+  itemTextCompleted: {
+    color: 'white',
+    textDecorationLine: 'line-through'
   }
 })
