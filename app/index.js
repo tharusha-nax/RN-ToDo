@@ -15,11 +15,11 @@ const DATA = [
   },
 ]
 
-const TodoItem = (props) => {
+const TodoItem = (props) => (
   <View style={styles.item}>
     <Text style={styles.inputItem}>{props.item.title}</Text>
   </View>
-}
+)
 
 export default function Index() {
   return (
@@ -37,6 +37,7 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
   },
