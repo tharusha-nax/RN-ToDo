@@ -77,7 +77,7 @@ export default function Index() {
           <View style={styles.modalView}>
             <TextInput style={styles.input} onChangeText={setText} value={text} />
             <Pressable style={styles.button} onPress={addNewTodo} >
-              <Text>Add new ToDo</Text>
+              <Text style={{ color: '#00B9E8'}}>Add ToDo</Text>
             </Pressable>
           </View>
         </View>

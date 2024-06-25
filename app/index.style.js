@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
         borderColor: 'black',
         borderWidth: 1,
-        padding: 5
+        padding: 5,
     },
     list: {
         alignSelf: 'stretch'
