@@ -1,21 +1,26 @@
 import { useState } from "react";
+import { Ionicons } from '@expo/vector-icons';
 import { Text, View, Button, Alert, StyleSheet, TextInput, FlatList, SafeAreaView, TouchableOpacity, Modal, StatusBar, Pressable } from "react-native";
+import { styles } from "./index.style";
 
 const DATA = [
   {
     id: '1',
     title: 'Meditation',
-    completed: false
+    completed: false,
+    color: '#EBC50C'
   },
   {
     id: '2',
     title: 'Coding',
-    completed: false
+    completed: false,
+    color: '#6DB6DD'
   },
   {
     id: '3',
     title: 'Journaling',
-    completed: false
+    completed: false,
+    color: '#BC96E6'
   },
 ]
 
@@ -28,11 +33,13 @@ export default function Index() {
     let newTodo = {
       id: items.length + 1,
       title: text,
-      completed: false
+      completed: false,
+      color: '#DF5E5E'
     }
 
     setItems([...items, newTodo]);
     setText('');
+    setIsModalVisible(false);
   }
 
   const markItemCompleted = (item) => {
@@ -46,19 +53,29 @@ export default function Index() {
   }
   const TodoItem = (props) => {
     return (
-      <TouchableOpacity style={styles.item} onPress={() => markItemCompleted(props.item)}>
+      <TouchableOpacity style={[styles.item, { backgroundColor: props.item.color }]} onPress={() => markItemCompleted(props.item)}>
         <Text style={props.item.completed ? styles.itemTextCompleted : styles.itemText}>{props.item.title}</Text>
+      </TouchableOpacity>
+    )
+  }
+
+  const renderAddButton = () => {
+    return (
+      <TouchableOpacity onPress={() => setIsModalVisible(true)} >
+        <View style={styles.icon}>
+          <Ionicons name="add" size={24} color="#652E00" />
+        </View>
       </TouchableOpacity>
     )
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <Button title="Add an item" onPress={() => setIsModalVisible(true)} />
+
       <Modal visible={isModalVisible} transparent={true} onRequestClose={() => setIsModalVisible(!isModalVisible)}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-        <TextInput style={styles.input} onChangeText={setText} value={text} />
+            <TextInput style={styles.input} onChangeText={setText} value={text} />
             <Pressable style={styles.button} onPress={addNewTodo} >
               <Text>Add new ToDo</Text>
             </Pressable>
@@ -70,65 +87,9 @@ export default function Index() {
         style={styles.list}
         data={items}
         renderItem={({ item }) => <TodoItem item={item} />}
-        keyExtractor={item => item.id} />
+        keyExtractor={item => item.id}
+        ListFooterComponent={renderAddButton}
+      />
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  input: {
-    height: 40,
-    width: 200,
-    borderWidth: 1,
-    padding: 10,
-    borderColor: 'gray',
-    marginBottom: 10
-  },
-  button: {
-    borderRadius: 10
-  },
-  list: {
-    alignSelf: 'stretch'
-  },
-  item: {
-    backgroundColor: '#6DB6DD',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderRadius: 10,
-  },
-
-  itemText: {
-    color: 'white',
-  },
-  itemTextCompleted: {
-    color: 'white',
-    textDecorationLine: 'line-through'
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: 'black',
-    shadowoffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  }
-})
